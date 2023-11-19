@@ -13,7 +13,7 @@ sm_session = sagemaker.Session()
 #Retrieve an example test dataset to test
 
 # Load the MNIST dataset and split it into training and testing sets
-(x_train, y_train), (x_test, y_test) = mnist.load_data('../mnist.npz')
+(x_train, y_train), (x_test, y_test) = mnist.load_data('../data/mnist.npz')
 # Select a random example from the training set
 example_index = np.random.randint(0, x_train.shape[0])
 example_image = x_train[example_index]
