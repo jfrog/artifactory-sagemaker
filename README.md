@@ -28,7 +28,7 @@ docker login <Artifactory url> -u <USER> -p <TOKEN>
 docker build -t <IMAGE NAME:TAG> --build-arg "PYPI_INDEX_URL=<Artifactory url><pypi virtual repo path and credentiales>" --build-arg "ARTIFACTORY_DOCKER_REGISTRY=<artifactory docker registry name>" .
 
 ```
-#### train_load_from_s3.py
+#### train.py
 ###### model train code that the Sagemaker train job will execute.
 
 #### training-job-private-docker-registry.py
