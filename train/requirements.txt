@@ -11,6 +11,5 @@ huggingface-hub==0.19.3
 sagemaker_inference==1.10.1
 multi-model-server==1.1.11
 sagemaker-training==4.7.4
-#CVE's
 cryptography==41.0.4
 PyJWT==2.4.0
