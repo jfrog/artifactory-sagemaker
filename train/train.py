@@ -126,8 +126,6 @@ if __name__ == '__main__':
     # Source: https://github.com/aws/sagemaker-training-toolkit/blob/master/ENVIRONMENT_VARIABLES.md#sm_input_dir
     # SM_INPUT_DIR=/opt/ml/input/
     # This will be the directory where the model will be stored when training is complete.
-    # Why not use SM_MODEL_DIR (/opt/ml/model)? Because items in this directory are automatically
-    #   uploaded to the default S3 bucket. Instead, we want items to be uploaded to Artifactory
     model_save_dir = f"{os.environ.get('SM_INPUT_DIR')}/new"
 
     # Evaluate the model based on test data
