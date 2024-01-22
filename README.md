@@ -1,42 +1,173 @@
 # Artifactory-Sagemaker
 
-## Demo to implement the integration between JFrog Artifactory to AWS Sagemaker.
+## Demo to implement the integration between JFrog Artifactory and AWS Sagemaker
+
+<hr style="border:2px solid gray">
+
+## Directory Contents
+
+<details>
+  <summary>dev
+
+Includes files related to Notebooks created within SageMaker or launched from SageMaker console
+</summary>
+
+***
+
+**Notebook subdirectory** - <i>for use when launching a notebook instance from the SageMaker console</i>
+
+- `lifecycle_configuration.sh`
+   
+   Code of the lifecycle configuration script to launch a sagemaker Notebook instance
+
+***
+ 
+**Studio subdirectory** - <i>for use when working within SageMaker Studio Classic</i>
+
+- `example.ipynb`
+  
+   Jupyter notebook with commands to demonstrate the following Artifactory and Sagemaker integrations after creating the 
+notebook in an environment started with the lifecycle configuration script:
+   1. JFrog CLI
+   2. Artifactory PyPI virtual repository
+   3. Artifactory HuggingFace ML remote repository
 
 
-## dev directory
-### Notebook subdirectory
-#### lifecycle_configuration.sh
-##### Code of the lifecycle configuration script to launch a sagemaker Notebook instance.
+- `lifecycle_configuration.sh`
+  
+   Code of the lifecycle configuration script to launch a sagemaker studio lab IDE 
 
-### Studio subdirectory
-#### lifecycle_configuration.sh
-###### Code of the lifecycle configuration script to launch a sagemaker studio lab IDE 
+</details>
 
-#### example.ipynb
-###### Jupiter notebook with comands to the set Artifactory and Sagemaker following integration:
-###### 1. JFrog cli
-###### 2. Artifactory Pypi virtual repository
-###### 3. Artifactory Huggingface remote repository 
+<hr style="border:2px solid gray">
 
-## train directory
-#### Dockerfile
-###### Dockerfile to build a model train image.
-#### Build:
-```agsl
-docker login <Artifactory url> -u <USER> -p <TOKEN>
+<details>
+<summary>inference
 
-docker build -t <IMAGE NAME:TAG> --build-arg "PYPI_INDEX_URL=<Artifactory url><pypi virtual repo path and credentiales>" --build-arg "ARTIFACTORY_DOCKER_REGISTRY=<artifactory docker registry name>" .
+Includes files related to deploying a model for real-time inference including
+retrieving a custom model from an Artifactory HuggingFace ML repository and creating a custom Docker image to
+launch with the SageMaker inference service
+</summary>
 
-```
-#### train.py
-###### model train code that the Sagemaker train job will execute.
+***
 
-#### training-job-private-docker-registry.py
-###### Code to create and execute Sagemaker train job using the Docker image we build.
+**sagemaker subdirectory**
 
-## inference directory
-#### deploy-model.py
-###### Code to deploy the trained model as a Sagemaker realtime inference.
+  - `Dockerfile`
+  
+    Dockerfile to build a custom image for inference
+  
+    Example `docker` commands to log in to the Artifactory Docker registry and then to build and push the 
+inference image to Artifactory:
+  
+    ```
+    docker login myartifactory.jfrog.io -u <USER> -p <TOKEN>
+    
+    docker build -t \
+      myartifactory.jfrog.io/sagemaker-docker-virtual/sagemaker/inference-service:1.0_huggingface \
+      --build-arg "ARTIFACTORY_DOCKER_REGISTRY=myartifactory.jfrog.io" \
+      --build-arg "ARTIFACTORY_DOCKER_REPO=sagemaker-docker-virtual" .
 
-####  test-inference.py
-###### Code to test the deployd Sagemaker realtime inference.
+    docker push myartifactory.jfrog.io/sagemaker-docker-virtual/sagemaker/inference-service:1.0_huggingface
+    ```
+  
+
+  - `entrypoint.py`
+  
+    Entrypoint script used in the custom Docker image to set up the inference handler service
+  
+
+  - `inference.py`
+  
+    Code included in the custom Docker image to handle inference using a custom Hugging Face ML model
+  
+
+
+***
+
+- `deploy-model.py`
+
+  Code to deploy the trained model as a SageMaker real-time inference
+  
+
+- `test-inference.py`
+
+  Code to test the deployed SageMaker real-time inference
+  
+
+</details>
+
+<hr style="border:2px solid gray">
+
+<details>
+  <summary>infrastructure
+
+Includes files related to setting up the AWS secret and Lambda required for the
+use of Artifactory within a SageMaker VPC environment
+</summary>
+
+***
+
+- `deploy-lambda.sh`
+- `deploy-secret.sh`
+- `lambda_function.py`
+
+</details>
+
+<hr style="border:2px solid gray">
+
+<details>
+  <summary>train
+
+Includes files related to creating and running a custom Docker image to
+train and store a model in Artifactory
+</summary>
+
+***
+
+- `Dockerfile`
+
+  Dockerfile to build a model train image
+
+  Example `docker` commands to log in to the Artifactory Docker registry and then to build and push the training image
+to Artifactory:
+  ```
+  docker login myartifactory.jfrog.io -u <USER> -p <TOKEN>
+
+  docker build -t \
+    myartifactory.jfrog.io/sagemaker-docker-virtual/sagemaker/train:1.0_huggingface \
+    --secret id=pipconfig,src=pip.conf \
+    --build-arg "ARTIFACTORY_DOCKER_REGISTRY=myartifactory.jfrog.io" \
+    --build-arg "ARTIFACTORY_DOCKER_REPO=sagemaker-docker-virtual" .
+
+    docker push myartifactory.jfrog.io/sagemaker-docker-virtual/sagemaker/train:1.0_huggingface
+  ```
+  
+
+- `pip.conf`
+  
+  File used to configure the Artifactory PyPI repository for use during the Python package installation section of the 
+Docker image build (used as a [Docker build secret](https://docs.docker.com/build/building/secrets/))
+  
+
+- `requirements.txt`
+  
+  Python package requirements for use during the custom Docker image build
+  
+  These requirements satisfy everything 
+needed for both the <i>train.py</i> and <i>inference.py</i> scripts (both are combined to 
+simplify the demo)
+  
+
+- `run-train-job.py`
+
+  Code to create and execute SageMaker train job using a custom Docker image
+
+
+- `train.py`
+
+  Model train code that the SageMaker train job will execute
+
+
+
+</details>

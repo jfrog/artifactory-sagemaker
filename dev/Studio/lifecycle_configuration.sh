@@ -144,5 +144,6 @@ do_it install_jfrog_cli
 do_it setup_pip
 do_it setup_huggingface
 do_it setup_jfrog_cli
+
 log_it ""
 log_it "<<< Finished ${SCRIPT_TITLE} setup at $(date +%FT%T)"

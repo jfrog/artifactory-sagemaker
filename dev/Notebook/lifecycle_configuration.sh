@@ -136,9 +136,6 @@ function append_to_jupyter_env_file() {
     echo "os.environ['${VAR_NAME}']=\"${VAR_VALUE}\"" >> ${JFROG_ENV_FILE}
 }
 
-
-
-
 log_it ">>> Starting ${SCRIPT_TITLE} setup at $(date +%FT%T)"
 log_it "Script version: ${SCRIPT_VERSION}"
 
