@@ -1,8 +1,6 @@
 # Artifactory-Sagemaker
 
-## Demo to implement the integration between JFrog Artifactory and AWS Sagemaker
-
-<hr style="border:2px solid gray">
+Demo to implement the integration between JFrog Artifactory and AWS Sagemaker
 
 ## Directory Contents
 
@@ -39,7 +37,7 @@ notebook in an environment started with the lifecycle configuration script:
 
 </details>
 
-<hr style="border:2px solid gray">
+***
 
 <details>
 <summary>inference
@@ -97,7 +95,7 @@ inference image to Artifactory:
 
 </details>
 
-<hr style="border:2px solid gray">
+***
 
 <details>
   <summary>infrastructure
@@ -114,7 +112,7 @@ use of Artifactory within a SageMaker VPC environment
 
 </details>
 
-<hr style="border:2px solid gray">
+***
 
 <details>
   <summary>train
